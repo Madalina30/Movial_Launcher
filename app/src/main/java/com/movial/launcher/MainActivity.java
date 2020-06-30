@@ -28,20 +28,28 @@ import java.util.List;
 import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class MainActivity extends AppCompatActivity {
+    //definitions
     GridLayout apps;
     LinearLayout apkButton;
     ImageView apkImage;
     TextView apkName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
+
+       //general setup
        apps = findViewById(R.id.buttons);
        final PackageManager pm = getPackageManager();
        List<ApplicationInfo> listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+       //app list processing
        for(ApplicationInfo app: listOfApps){
+           //removing system apps
            Intent intent = getPackageManager().getLaunchIntentForPackage(app.packageName);
            if (intent != null) {
+               //design creation
                apkButton = new LinearLayout(this);
                LinearLayout.LayoutParams apk = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                apk.setMargins(25, 15, 25, 15);
@@ -54,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                img.width = 150;
                img.height = 150;
                apkImage.setLayoutParams(img);
+
                try {
                    ApplicationInfo appInfo = getPackageManager().getApplicationInfo(app.packageName, 0);
                    apkImage.setBackground(getPackageManager().getApplicationIcon(appInfo));
@@ -65,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
                LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                text.gravity = Gravity.CENTER;
                apkName.setLayoutParams(text);
+               apkName.setTextSize(12);
+
                try {
                    ApplicationInfo appInfo = getPackageManager().getApplicationInfo(app.packageName, 0);
                    String name = getPackageManager().getApplicationLabel(appInfo).toString();
@@ -74,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
                } catch (PackageManager.NameNotFoundException e) {
                    e.printStackTrace();
                }
-               apkName.setTextSize(12);
 
-               //packageName pt deschis app
-
+               //design setup
                apps.addView(apkButton);
                apkButton.addView(apkImage);
                apkButton.addView(apkName);
+
+               //launch app
                final ApplicationInfo fapp = app;
                apkButton.setOnClickListener(new View.OnClickListener() {
                    @Override
