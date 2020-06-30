@@ -5,9 +5,9 @@
     <!--de modificat permisiunea pt a accesa alte aplicatii-->
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_icon"
+        android:icon="@drawable/ic_bunny"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_icon"
+        android:roundIcon="@drawable/ic_bunny"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".MainActivity">
