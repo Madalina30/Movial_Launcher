@@ -1,0 +1,2 @@
+rootProject.name='Movial Launcher'
+include ':app'
