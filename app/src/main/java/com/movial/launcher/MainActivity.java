@@ -30,9 +30,6 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 public class MainActivity extends AppCompatActivity {
     //definitions
     GridLayout apps;
-    LinearLayout apkButton;
-    ImageView apkImage;
-    TextView apkName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,64 +46,9 @@ public class MainActivity extends AppCompatActivity {
            //removing system apps
            Intent intent = getPackageManager().getLaunchIntentForPackage(app.packageName);
            if (intent != null) {
-               //design creation
-               apkButton = new LinearLayout(this);
-               LinearLayout.LayoutParams apk = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-               apk.setMargins(25, 15, 25, 15);
-               apk.gravity = Gravity.CENTER;
-               apkButton.setLayoutParams(apk);
-               apkButton.setOrientation(LinearLayout.VERTICAL);
-
-               apkImage = new ImageView(this);
-               LinearLayout.LayoutParams img = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-               img.width = 150;
-               img.height = 150;
-               apkImage.setLayoutParams(img);
-
-               try {
-                   ApplicationInfo appInfo = getPackageManager().getApplicationInfo(app.packageName, 0);
-                   apkImage.setBackground(getPackageManager().getApplicationIcon(appInfo));
-               } catch (PackageManager.NameNotFoundException e) {
-                   e.printStackTrace();
-               }
-
-               apkName = new TextView(this);
-               LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-               text.gravity = Gravity.CENTER;
-               apkName.setLayoutParams(text);
-               apkName.setTextSize(12);
-
-               try {
-                   ApplicationInfo appInfo = getPackageManager().getApplicationInfo(app.packageName, 0);
-                   String name = getPackageManager().getApplicationLabel(appInfo).toString();
-                   if (name.length() > 7)
-                       name = name.substring(0, 7) + "...";
-                   apkName.setText(name);
-               } catch (PackageManager.NameNotFoundException e) {
-                   e.printStackTrace();
-               }
-
-               //design setup
-               apps.addView(apkButton);
-               apkButton.addView(apkImage);
-               apkButton.addView(apkName);
-
-               //launch app
-               final ApplicationInfo fapp = app;
-               apkButton.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       Intent intent = getPackageManager().getLaunchIntentForPackage(fapp.packageName);
-                       if (intent != null) {
-                           try {
-                               startActivity(intent);
-                           } catch (ActivityNotFoundException e) {
-                               e.printStackTrace();
-                               Toast.makeText(getApplicationContext(), "App not found", Toast.LENGTH_SHORT).show();
-                           }
-                       }
-                   }
-               });
+               /*Design creation*/
+               AppListBuilder design = new AppListBuilder(app,apps,this);
+               design.buildApp();
            }
        }
     }
