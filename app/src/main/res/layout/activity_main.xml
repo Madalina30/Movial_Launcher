@@ -4,24 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#404040"
+    android:background="@android:color/transparent"
     tools:context=".MainActivity">
-    <ScrollView
+    <LinearLayout
+        android:background="@android:color/transparent"
+        android:id="@+id/designBase"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:gravity="center_horizontal"
-            android:layout_height="match_parent">
-            <GridLayout
-                android:id="@+id/buttons"
-                android:layout_width="wrap_content"
-                android:visibility="visible"
-                android:columnCount="4"
-                android:layout_height="wrap_content">
-            </GridLayout>
-        </LinearLayout>
-    </ScrollView>
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:gravity="center_horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,6 @@
+/*
+List of apps
+* */
 package com.movial.launcher;
 
 import android.content.ActivityNotFoundException;
@@ -22,29 +25,20 @@ public class AppListBuilder extends AppCompatActivity {
     ImageView apkImage;
     TextView apkName;
     ApplicationInfo app;
-    GridLayout apps;
     Context context;
 
-    AppListBuilder(ApplicationInfo app, GridLayout apps,Context context){
+    AppListBuilder(ApplicationInfo app, Context context){
         this.app = app;
-        this.apps = apps;
         this.context = context;
     }
 
-    public void buildApp(){
-        apkButton = new LinearLayout(context);
-        LinearLayout.LayoutParams apk = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        apk.setMargins(25, 15, 25, 15);
-        apk.gravity = Gravity.CENTER;
-        apkButton.setLayoutParams(apk);
-        apkButton.setOrientation(LinearLayout.VERTICAL);
+    public LinearLayout buildApp(){
+        DesignComponents design = new DesignComponents();
+        //button
+        apkButton = design.createLinearLayout(context,-2,-2,25,15,25,15);
 
-        apkImage = new ImageView(context);
-        LinearLayout.LayoutParams img = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        img.width = 150;
-        img.height = 150;
-        apkImage.setLayoutParams(img);
-
+        //apkImage
+        apkImage = design.createImageView(context,-2,-2,170,170);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             apkImage.setBackground(context.getPackageManager().getApplicationIcon(appInfo));
@@ -52,12 +46,8 @@ public class AppListBuilder extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        apkName = new TextView(context);
-        LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        text.gravity = Gravity.CENTER;
-        apkName.setLayoutParams(text);
-        apkName.setTextSize(12);
-
+        //apkName
+        apkName = design.createTextView(context,-2,-2,12);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             String name = context.getPackageManager().getApplicationLabel(appInfo).toString();
@@ -69,7 +59,6 @@ public class AppListBuilder extends AppCompatActivity {
         }
 
         //design setup
-        apps.addView(apkButton);
         apkButton.addView(apkImage);
         apkButton.addView(apkName);
 
@@ -80,6 +69,7 @@ public class AppListBuilder extends AppCompatActivity {
                 openApp();
             }
         });
+        return apkButton;
     }
 
     public void openApp(){

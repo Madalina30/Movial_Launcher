@@ -29,28 +29,33 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class MainActivity extends AppCompatActivity {
     //definitions
-    GridLayout apps;
-
+    int page;
+    public GridLayout[] apps;
+    LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
 
        //general setup
-       apps = findViewById(R.id.buttons);
-       final PackageManager pm = getPackageManager();
-       List<ApplicationInfo> listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        final PackageManager pm = getPackageManager();
+        List<ApplicationInfo> listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        Pagination pagination = new Pagination(20,this);
+
+        apps = pagination.buildList(listOfApps);
+
+        linearLayout = findViewById(R.id.designBase);
 
        //app list processing
-       for(ApplicationInfo app: listOfApps){
-           //removing system apps
-           Intent intent = getPackageManager().getLaunchIntentForPackage(app.packageName);
-           if (intent != null) {
-               /*Design creation*/
-               AppListBuilder design = new AppListBuilder(app,apps,this);
-               design.buildApp();
-           }
-       }
+
+        SwipeHandler swipe = new SwipeHandler(this, linearLayout, apps);
+        linearLayout.addView(apps[0]);
+        swipe.Swipe();
+
+
+       System.out.println(listOfApps.size());
     }
 
 }
