@@ -39,6 +39,7 @@ public class NewsAndWeather extends AppCompatActivity {
     RequestQueue requestQueue;
     JsonObjectRequest jsonObjectRequest;
     String NEWS_API = "https://www.reddit.com/search.json?q=tech&limit=10";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

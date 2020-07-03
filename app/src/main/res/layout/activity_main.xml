@@ -7,14 +7,14 @@
     android:background="@android:color/transparent"
     android:backgroundTint="@android:color/transparent"
     tools:context=".MainActivity">
+
     <LinearLayout
-        android:background="@android:color/transparent"
         android:id="@+id/designBase"
         android:layout_width="match_parent"
-        android:paddingTop="35dp"
-        android:paddingBottom="20dp"
-        android:gravity="center_horizontal"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:background="@android:color/transparent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="35dp"
+        android:paddingBottom="20dp"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

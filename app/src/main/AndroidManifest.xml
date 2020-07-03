@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewsAndWeather"
+        <activity
+            android:name=".NewsAndWeather"
             android:theme="@style/Theme.News">
 
         </activity>
