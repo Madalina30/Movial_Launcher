@@ -27,18 +27,18 @@ public class AppListBuilder extends AppCompatActivity {
     ApplicationInfo app;
     Context context;
 
-    AppListBuilder(ApplicationInfo app, Context context){
+    AppListBuilder(ApplicationInfo app, Context context) {
         this.app = app;
         this.context = context;
     }
 
-    public LinearLayout buildApp(){
+    public LinearLayout buildApp() {
         DesignComponents design = new DesignComponents();
         //button
-        apkButton = design.createLinearLayout(context,-2,-2,25,15,25,15);
+        apkButton = design.createLinearLayout(context, -2, -2, 35, 35, 35, 35);
 
         //apkImage
-        apkImage = design.createImageView(context,-2,-2,170,170);
+        apkImage = design.createImageView(context, -2, -2, 170, 170);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             apkImage.setBackground(context.getPackageManager().getApplicationIcon(appInfo));
@@ -47,7 +47,7 @@ public class AppListBuilder extends AppCompatActivity {
         }
 
         //apkName
-        apkName = design.createTextView(context,-2,-2,12);
+        apkName = design.createTextView(context, -2, -2, 12);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             String name = context.getPackageManager().getApplicationLabel(appInfo).toString();
@@ -72,7 +72,7 @@ public class AppListBuilder extends AppCompatActivity {
         return apkButton;
     }
 
-    public void openApp(){
+    public void openApp() {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(app.packageName);
         if (intent != null) {
             try {
