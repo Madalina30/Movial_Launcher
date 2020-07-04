@@ -106,11 +106,13 @@ public class Settings extends AppCompatActivity {
         large.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imgWidth = imgHeight = 190;
-                getSharedPreferences("gridValues", MODE_PRIVATE).edit().putInt("imgWidth", 190).apply();
                 if (numberOfColumns == 5) {
                     imgWidth = imgHeight = 170;
                     getSharedPreferences("gridValues", MODE_PRIVATE).edit().putInt("imgWidth", 170).apply();
+                }
+                else{
+                    imgWidth = imgHeight = 190;
+                    getSharedPreferences("gridValues", MODE_PRIVATE).edit().putInt("imgWidth", 190).apply();
                 }
             }
         });
