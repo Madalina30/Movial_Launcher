@@ -3,6 +3,7 @@ package com.movial.launcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +33,14 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class MainActivity extends AppCompatActivity {
     //definitions
+    Context context = this;
+    RelativeLayout settings;
     int page;
+    int mLeft, mRight, imgWidth, imgHeight;
     public GridLayout[] apps;
     LinearLayout linearLayout;
-
+    public int numberOfColumns;
+    public int appsPerPage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +48,25 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         //general setup
-
+        settings = findViewById(R.id.settings);
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        Pagination pagination = new Pagination(24, this);
+        //getting informations from settings
+        Settings set = new Settings();
+        numberOfColumns = set.numberOfColumns;
+        appsPerPage = set.appsPerPage;
+        mLeft = mRight = set.mLeft;
+        imgWidth = imgHeight = set.imgWidth;
 
-        apps = pagination.buildList(listOfApps);
+        if (appsPerPage == 0) appsPerPage = 24;
+        if(numberOfColumns == 0) numberOfColumns = 4;
+        if (mLeft == 0 && mRight == 0) mLeft = mRight = 35;
+        if (imgWidth == 0 && imgHeight == 0) imgWidth = imgHeight = 170;
+
+        Pagination pagination = new Pagination(appsPerPage, this);
+
+        apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
 
         linearLayout = findViewById(R.id.designBase);
 
@@ -58,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(apps[0]);
         swipe.Swipe();
 
-        System.out.println(listOfApps.size());
+        //button for settings
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Settings.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

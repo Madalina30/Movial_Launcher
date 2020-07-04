@@ -21,9 +21,9 @@ public class Pagination {
         this.context = context;
     }
 
-    public GridLayout[] buildList(List<ApplicationInfo> listOfApps) {
+    public GridLayout[] buildList(List<ApplicationInfo> listOfApps, int nrColumns, int mLeft, int mRight, int imgWidth, int imgHeight) {
         DesignComponents design = new DesignComponents();
-        pages[pageNumber] = design.createGridLayout(context, -2, -2, 4);
+        pages[pageNumber] = design.createGridLayout(context, -2, -2, nrColumns);
         int countGoodApps = 0;
         for (ApplicationInfo app : listOfApps) {
             //removing system apps
@@ -32,11 +32,11 @@ public class Pagination {
                 /*Design creation*/
                 countGoodApps++;
                 AppListBuilder build = new AppListBuilder(app, context);
-                pages[pageNumber].addView(build.buildApp());
+                pages[pageNumber].addView(build.buildApp(mLeft, mRight, imgWidth, imgHeight));
                 if (countGoodApps == appsPerPage) {
                     countGoodApps = 0;
                     pageNumber++;
-                    pages[pageNumber] = design.createGridLayout(context, -2, -2, 4);
+                    pages[pageNumber] = design.createGridLayout(context, -2, -2, nrColumns);
                 }
             }
         }

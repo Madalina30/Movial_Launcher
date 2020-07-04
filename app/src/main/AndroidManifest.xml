@@ -12,22 +12,24 @@
         android:roundIcon="@drawable/ic_bunny"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.Wallpaper">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".NewsAndWeather"
+        <activity android:name=".Settings"
             android:theme="@style/Theme.News">
 
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Wallpaper">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+<!--                <category android:name="android.intent.category.HOME" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".News"
+            android:theme="@style/Theme.News" />
     </application>
 
 </manifest>

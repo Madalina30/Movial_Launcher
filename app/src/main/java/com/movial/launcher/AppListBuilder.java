@@ -32,13 +32,13 @@ public class AppListBuilder extends AppCompatActivity {
         this.context = context;
     }
 
-    public LinearLayout buildApp() {
+    public LinearLayout buildApp(int mLeft, int mRight, int imgWidth, int imgHeight) {
         DesignComponents design = new DesignComponents();
         //button
-        apkButton = design.createLinearLayout(context, -2, -2, 35, 35, 35, 35);
+        apkButton = design.createLinearLayout(context, -2, -2, mLeft, 35, mRight, 35);
 
         //apkImage
-        apkImage = design.createImageView(context, -2, -2, 170, 170);
+        apkImage = design.createImageView(context, -2, -2, imgWidth, imgHeight);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             apkImage.setBackground(context.getPackageManager().getApplicationIcon(appInfo));

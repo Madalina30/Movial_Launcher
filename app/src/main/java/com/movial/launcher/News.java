@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DownloadManager;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,11 +31,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-public class NewsAndWeather extends AppCompatActivity {
+public class News extends AppCompatActivity {
     TextView title;
     ImageView img;
     SearchView searchGoogle;
@@ -43,7 +48,7 @@ public class NewsAndWeather extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_and_weather);
+        setContentView(R.layout.activity_news);
 
         //Instantiate the search bar
         searchGoogle = findViewById(R.id.google);
@@ -69,8 +74,8 @@ public class NewsAndWeather extends AppCompatActivity {
                     JSONObject data = response.getJSONObject("data");
                     JSONObject obj = (JSONObject) data.getJSONArray("children").get(0);
                     title.setText(obj.getJSONObject("data").getString("title").toString());
-                    JSONObject imgz = (JSONObject) obj.getJSONObject("data").getJSONObject("preview").getJSONArray("images").get(0);
-                    img.setImageDrawable(LoadImageFromWebOperations(imgz.getJSONObject("source").getString("url").toString()));
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     title.setText("" + e);
@@ -83,15 +88,6 @@ public class NewsAndWeather extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-    }
 
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "s" + is);
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

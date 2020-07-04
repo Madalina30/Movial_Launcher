@@ -26,6 +26,10 @@ public class SwipeHandler {
         this.apps = apps;
     }
 
+    SwipeHandler(Context context1) {
+        this.context = context1;
+    }
+
     public void Swipe() {
         workOn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -64,8 +68,9 @@ public class SwipeHandler {
             pageNumber--;
             if (pageNumber == -1) {
                 //it goes to the NewsAndWeather class when swipe left
-                Intent intent = new Intent(context, NewsAndWeather.class);
+                Intent intent = new Intent(context, News.class);
                 context.startActivity(intent);
+                pageNumber = 0;
             } else {
                 workOn.addView(apps[pageNumber]);
                 workOn.removeView(apps[pageNumber + 1]);
@@ -74,6 +79,5 @@ public class SwipeHandler {
                         .playOn(workOn);
             }
         }
-
     }
 }
