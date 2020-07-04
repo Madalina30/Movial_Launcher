@@ -3,10 +3,12 @@ For left and right swipe
 * */
 package com.movial.launcher;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
@@ -14,23 +16,72 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 public class SwipeHandler {
-    Context context;
+    Activity activity;
     public int pageNumber = 0;
     public float x1, x2;
     LinearLayout workOn;
     GridLayout[] apps;
 
-    SwipeHandler(Context context, LinearLayout workOn, GridLayout[] apps) {
-        this.context = context;
+    SwipeHandler(Activity activity, LinearLayout workOn, GridLayout[] apps) {
+        this.activity = activity;
         this.workOn = workOn;
         this.apps = apps;
     }
 
-    SwipeHandler(Context context1) {
-        this.context = context1;
+    SwipeHandler(Activity activity) {
+        this.activity = activity;
     }
 
     public void Swipe() {
+        System.out.println(" NU intra");
+        GridLayout grid = ((GridLayout) workOn.getChildAt(pageNumber + 1));
+        for (int i = 0; i < grid.getChildCount(); i++){
+            grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    System.out.println("intra");
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            x1 = event.getX();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            x2 = event.getX();
+                            checkDirection(x1, x2);
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
+        workOn.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                GridLayout grid = ((GridLayout) workOn.getChildAt(2));
+                for (int i = 0; i < grid.getChildCount(); i++){
+                    grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            System.out.println("intra");
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    x1 = event.getX();
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    x2 = event.getX();
+                                    checkDirection(x1, x2);
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+
+            }
+        });
         workOn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent touchEvent) {
@@ -62,14 +113,14 @@ public class SwipeHandler {
                             .playOn(workOn);
                 }
             } else { //back to apps
-
+                activity.finish();
             }
         } else {
             pageNumber--;
             if (pageNumber == -1) {
                 //it goes to the NewsAndWeather class when swipe left
-                Intent intent = new Intent(context, News.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(activity, News.class);
+                activity.startActivity(intent);
                 pageNumber = 0;
             } else {
                 workOn.addView(apps[pageNumber]);

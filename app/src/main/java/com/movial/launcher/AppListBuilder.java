@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.GridLayout;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -32,6 +34,7 @@ public class AppListBuilder extends AppCompatActivity {
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public LinearLayout buildApp(int mLeft, int mRight, int imgWidth, int imgHeight) {
         DesignComponents design = new DesignComponents();
         //button

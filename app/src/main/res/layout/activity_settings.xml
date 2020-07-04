@@ -123,6 +123,19 @@
             android:background="@drawable/round"
             android:textSize="20dp"
             tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/backToDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:text="Back to default"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/round"
+            android:textSize="20dp"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

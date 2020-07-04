@@ -7,12 +7,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DesignComponents extends AppCompatActivity {
@@ -51,9 +53,11 @@ public class DesignComponents extends AppCompatActivity {
         img.height = imgHeight;
         apkImage.setLayoutParams(img);
         apkImage.setBackground(Drawable.createFromPath("@android:color/transparent"));
+        apkImage.setAdjustViewBounds(true);
         return apkImage;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public TextView createTextView(Context context, int width, int height, int textSize) {
         apkName = new TextView(context);
         LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(width, height);
@@ -61,6 +65,7 @@ public class DesignComponents extends AppCompatActivity {
         apkName.setLayoutParams(text);
         apkName.setTextSize(textSize); //12
         apkName.setTextColor(Color.WHITE);
+        apkName.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         apkName.setBackground(Drawable.createFromPath("@android:color/transparent"));
         return apkName;
     }
