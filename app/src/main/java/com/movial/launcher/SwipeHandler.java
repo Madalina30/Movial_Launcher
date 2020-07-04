@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 public class SwipeHandler {
     Activity activity;
+    ScrollView scroll;
     public int pageNumber = 0;
     public float x1, x2;
     LinearLayout workOn;
@@ -28,18 +30,17 @@ public class SwipeHandler {
         this.apps = apps;
     }
 
-    SwipeHandler(Activity activity) {
+    SwipeHandler(Activity activity, ScrollView scroll) {
         this.activity = activity;
+        this.scroll = scroll;
     }
 
     public void Swipe() {
-        System.out.println(" NU intra");
         GridLayout grid = ((GridLayout) workOn.getChildAt(pageNumber + 1));
-        for (int i = 0; i < grid.getChildCount(); i++){
+        for (int i = 0; i < grid.getChildCount(); i++) {
             grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    System.out.println("intra");
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             x1 = event.getX();
@@ -57,11 +58,10 @@ public class SwipeHandler {
             @Override
             public void onChildViewAdded(View parent, View child) {
                 GridLayout grid = ((GridLayout) workOn.getChildAt(2));
-                for (int i = 0; i < grid.getChildCount(); i++){
+                for (int i = 0; i < grid.getChildCount(); i++) {
                     grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
-                            System.out.println("intra");
                             switch (event.getAction()) {
                                 case MotionEvent.ACTION_DOWN:
                                     x1 = event.getX();
@@ -112,8 +112,6 @@ public class SwipeHandler {
                             .duration(200)
                             .playOn(workOn);
                 }
-            } else { //back to apps
-                activity.finish();
             }
         } else {
             pageNumber--;
@@ -130,5 +128,26 @@ public class SwipeHandler {
                         .playOn(workOn);
             }
         }
+    }
+    public void swipeRight(){
+        scroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = event.getX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        x2 = event.getX();
+                        if ((x1 - 200) > x2) {
+                            Intent intent = new Intent(activity, MainActivity.class);
+                            activity.startActivity(intent);
+                            activity.finish();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
     }
 }
