@@ -129,7 +129,8 @@ public class SwipeHandler {
             }
         }
     }
-    public void swipeRight(){
+
+    public void swipeRight() {
         scroll.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

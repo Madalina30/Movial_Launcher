@@ -5,6 +5,7 @@ package com.movial.launcher;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -31,11 +33,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class News extends AppCompatActivity {
     //definitions
+    SwipeRefreshLayout swipeRefreshLayout;
     Activity activity;
     Context context;
     ScrollView scroll;
@@ -45,7 +49,7 @@ public class News extends AppCompatActivity {
     SearchView searchGoogle;
     RequestQueue requestQueue;
     JsonObjectRequest jsonObjectRequest;
-    String[] categories = {"tech","it","food","history","sport"};
+    String[] categories = {"business", "technology", "entertainment", "sport", "science", "health", "general"};
     String category;
     String NEWS_API;
     float x1, x2;
@@ -65,11 +69,23 @@ public class News extends AppCompatActivity {
         //adding context and activity
         context = this;
         activity = this;
-        int plm = (int) Math.floor(Math.random()*4);
-        category = categories[plm];
-        NEWS_API = "https://www.reddit.com/search.json?q="+category+"&limit=10";
-        Toast.makeText(this, category+" "+NEWS_API,Toast.LENGTH_SHORT).show();
+
+        int number = (int) Math.floor(Math.random() * 6);
+        category = categories[number];
+
+        NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
+        Toast.makeText(this, category + " " + NEWS_API, Toast.LENGTH_SHORT).show();
         newsSection = findViewById(R.id.news);
+
+        //refresh
+        swipeRefreshLayout = findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                finish();
+                startActivity(getIntent());
+            }
+        });
 
         //Instantiate the search bar
         searchGoogle = findViewById(R.id.google);
@@ -92,7 +108,7 @@ public class News extends AppCompatActivity {
 
         final DesignComponents designComponents = new DesignComponents();
         // Request a string response from the provided URL
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             final int finalI = i;
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, NEWS_API, null, new Response.Listener<JSONObject>() {
                 @Override
@@ -103,15 +119,35 @@ public class News extends AppCompatActivity {
                         newNews = designComponents.createLinearLayout(context, -1, -2, 40, 40, 40, 40);
                         newNews.setOrientation(LinearLayout.HORIZONTAL);
                         newNews.setBackgroundColor(Color.parseColor("#3a3a3a"));
-                        JSONObject data = response.getJSONObject("data");
-                        JSONObject obj = (JSONObject) data.getJSONArray("children").get(finalI);
-                        int size = (int) Math.floor((Math.random() * 350 ) + 300);
-                        Picasso.get().load("https://picsum.photos/" + size + "/300").resize(300, 300).into(img);
+
+                        JSONArray data = response.getJSONArray("articles");
+                        JSONObject obj = (JSONObject) data.get(finalI);
+
+                        int size = (int) Math.floor((Math.random() * 350) + 300);
+                        img.setBackgroundResource(R.drawable.ic_bunny);
+                        img.getLayoutParams().width = 400;
+                        img.getLayoutParams().height = 250;
+                        Picasso.get().load(obj.getString("urlToImage")).resize(400, 250).into(img);
                         newNews.addView(img);
-                        title.setText(obj.getJSONObject("data").getString("title"));
+                        title.setText(obj.getString("title"));
                         title.setPadding(20, 0, 0, 0);
                         newNews.addView(title);
                         newsSection.addView(newNews);
+
+                        final JSONObject objF = obj;
+                        newNews.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    String url = objF.getString("url");
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(url));
+                                    startActivity(intent);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -122,7 +158,7 @@ public class News extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    title.setText("nu merge");
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 }
             });
             requestQueue.add(jsonObjectRequest);

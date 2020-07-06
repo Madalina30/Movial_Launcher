@@ -6,7 +6,10 @@ package com.movial.launcher;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.widget.GridLayout;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class Pagination {
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public GridLayout[] buildList(List<ApplicationInfo> listOfApps, int nrColumns, int mLeft, int mRight, int imgWidth, int imgHeight) {
         DesignComponents design = new DesignComponents();
         pages[pageNumber] = design.createGridLayout(context, -2, -2, nrColumns);

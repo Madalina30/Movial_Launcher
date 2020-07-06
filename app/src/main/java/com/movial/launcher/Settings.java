@@ -36,7 +36,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         context = this;
         //number of columns
@@ -109,8 +109,7 @@ public class Settings extends AppCompatActivity {
                 if (numberOfColumns == 5) {
                     imgWidth = imgHeight = 170;
                     getSharedPreferences("gridValues", MODE_PRIVATE).edit().putInt("imgWidth", 170).apply();
-                }
-                else{
+                } else {
                     imgWidth = imgHeight = 190;
                     getSharedPreferences("gridValues", MODE_PRIVATE).edit().putInt("imgWidth", 190).apply();
                 }
