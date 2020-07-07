@@ -61,9 +61,10 @@ public class News extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
+        //the screen will not be able to be in the landscape mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //setting transparent notification bar and navigation bar
+        //for the navigation bar and notification bar to be transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         //adding context and activity
@@ -74,7 +75,6 @@ public class News extends AppCompatActivity {
         category = categories[number];
 
         NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
-        Toast.makeText(this, category + " " + NEWS_API, Toast.LENGTH_SHORT).show();
         newsSection = findViewById(R.id.news);
 
         //refresh
@@ -114,26 +114,33 @@ public class News extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        //construction of elements
                         title = designComponents.createTextView(context, -2, -2, 12);
                         img = designComponents.createImageView(context, -2, -2, 300, 300);
                         newNews = designComponents.createLinearLayout(context, -1, -2, 40, 40, 40, 40);
                         newNews.setOrientation(LinearLayout.HORIZONTAL);
                         newNews.setBackgroundColor(Color.parseColor("#3a3a3a"));
 
+                        //getting information from the internet
                         JSONArray data = response.getJSONArray("articles");
                         JSONObject obj = (JSONObject) data.get(finalI);
 
                         int size = (int) Math.floor((Math.random() * 350) + 300);
+
+                        //setting image
                         img.setBackgroundResource(R.drawable.ic_bunny);
                         img.getLayoutParams().width = 400;
                         img.getLayoutParams().height = 250;
                         Picasso.get().load(obj.getString("urlToImage")).resize(400, 250).into(img);
                         newNews.addView(img);
+
+                        //setting news title
                         title.setText(obj.getString("title"));
                         title.setPadding(20, 0, 0, 0);
                         newNews.addView(title);
                         newsSection.addView(newNews);
 
+                        //going to the news site
                         final JSONObject objF = obj;
                         newNews.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -4,8 +4,8 @@ For left and right swipe
 package com.movial.launcher;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +13,13 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import androidx.annotation.RequiresApi;
+
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 public class SwipeHandler {
+    //definitions
     Activity activity;
     ScrollView scroll;
     public int pageNumber = 0;
@@ -36,52 +39,57 @@ public class SwipeHandler {
     }
 
     public void Swipe() {
-        GridLayout grid = ((GridLayout) workOn.getChildAt(pageNumber + 1));
-        for (int i = 0; i < grid.getChildCount(); i++) {
-            grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            x1 = event.getX();
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            x2 = event.getX();
-                            checkDirection(x1, x2);
-                            break;
-                    }
-                    return true;
-                }
-            });
-        }
-        workOn.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
-            @Override
-            public void onChildViewAdded(View parent, View child) {
-                GridLayout grid = ((GridLayout) workOn.getChildAt(2));
-                for (int i = 0; i < grid.getChildCount(); i++) {
-                    grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    x1 = event.getX();
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                    x2 = event.getX();
-                                    checkDirection(x1, x2);
-                                    break;
-                            }
-                            return true;
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onChildViewRemoved(View parent, View child) {
-
-            }
-        });
+        //to be able to swipe over the apps on the first page
+//        GridLayout grid = ((GridLayout) workOn.getChildAt(pageNumber + 1));
+//        for (int i = 0; i < grid.getChildCount(); i++) {
+//            grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+//                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN:
+//                            x1 = event.getX();
+//                            break;
+//                        case MotionEvent.ACTION_UP:
+//                            x2 = event.getX();
+//                            checkDirection(x1, x2);
+//                            break;
+//                    }
+//                    return true;
+//                }
+//            });
+//        }
+//
+//        //to be able to swipe over the apps from the second page to the end
+//        workOn.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+//            @Override
+//            public void onChildViewAdded(View parent, View child) {
+//                GridLayout grid = ((GridLayout) workOn.getChildAt(2));
+//                for (int i = 0; i < grid.getChildCount(); i++) {
+//                    grid.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+//                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//                        @Override
+//                        public boolean onTouch(View v, MotionEvent event) {
+//                            switch (event.getAction()) {
+//                                case MotionEvent.ACTION_DOWN:
+//                                    x1 = event.getX();
+//                                    break;
+//                                case MotionEvent.ACTION_UP:
+//                                    x2 = event.getX();
+//                                    checkDirection(x1, x2);
+//                                    break;
+//                            }
+//                            return true;
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onChildViewRemoved(View parent, View child) {
+//
+//            }
+//        });
         workOn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent touchEvent) {
@@ -113,7 +121,7 @@ public class SwipeHandler {
                             .playOn(workOn);
                 }
             }
-        } else {
+        } else if (x1 < x2){
             pageNumber--;
             if (pageNumber == -1) {
                 //it goes to the NewsAndWeather class when swipe left
@@ -131,6 +139,7 @@ public class SwipeHandler {
     }
 
     public void swipeRight() {
+        //from the news section to the apps
         scroll.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

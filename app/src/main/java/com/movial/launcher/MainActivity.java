@@ -1,40 +1,33 @@
 package com.movial.launcher;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
-import java.security.Permission;
 import java.util.List;
 
-import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class MainActivity extends AppCompatActivity {
     //definitions
+    static List<ApplicationInfo> listOfApps;
+    PackageManager pm;
+    IntentFilter filter;
+    MyReceiver receiver;
     Context context = this;
     RelativeLayout settings;
     int page;
@@ -43,19 +36,34 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     public int numberOfColumns;
     public int appsPerPage;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //the screen will not be able to be in the landscape mode
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        //for the navigation bar and notification bar to be transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
         //general setup
+        filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        filter.addAction(Intent.ACTION_PACKAGE_DATA_CLEARED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        filter.addAction(Intent.ACTION_PACKAGE_RESTARTED);
+        filter.addDataScheme("package");
+        receiver = new MyReceiver();
+        registerReceiver(receiver, filter); //+unregister
         settings = findViewById(R.id.settings);
-        final PackageManager pm = getPackageManager();
-        List<ApplicationInfo> listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        pm = getPackageManager();
+        listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         //setting default values
         if (appsPerPage == 0) appsPerPage = 24;
@@ -70,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         imgWidth = imgHeight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("imgWidth", 170);
 
         Pagination pagination = new Pagination(appsPerPage, this);
-
         apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
 
         linearLayout = findViewById(R.id.designBase);
