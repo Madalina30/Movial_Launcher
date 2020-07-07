@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,10 +27,11 @@ public class MainActivity extends AppCompatActivity {
     //definitions
     static List<ApplicationInfo> listOfApps;
     PackageManager pm;
-    IntentFilter filter;
-    MyReceiver receiver;
+    static IntentFilter filter;
+    static MyReceiver receiver;
     Context context = this;
     RelativeLayout settings;
+    Pagination pagination;
     int page;
     int mLeft, mRight, imgWidth, imgHeight;
     public GridLayout[] apps;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         mLeft = mRight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("mLeft", 35);
         imgWidth = imgHeight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("imgWidth", 170);
 
-        Pagination pagination = new Pagination(appsPerPage, this);
+        pagination = new Pagination(appsPerPage, this);
         apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
 
         linearLayout = findViewById(R.id.designBase);
@@ -98,6 +100,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(context, "AICI SE OPRESTE", Toast.LENGTH_SHORT).show();
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
