@@ -49,10 +49,7 @@ public class News extends AppCompatActivity {
     SearchView searchGoogle;
     RequestQueue requestQueue;
     JsonObjectRequest jsonObjectRequest;
-    String[] categories = {"business", "technology", "entertainment", "sport", "science", "health", "general"};
-    String category;
-    String NEWS_API;
-    float x1, x2;
+    private String[] categories = {"business", "technology", "entertainment", "sport", "science", "health", "general"};
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SourceLockedOrientationActivity")
@@ -73,9 +70,9 @@ public class News extends AppCompatActivity {
 
         //choosing a random category for the news
         int number = (int) Math.floor(Math.random() * 6);
-        category = categories[number];
+        String category = categories[number];
 
-        NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
+        String NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
         newsSection = findViewById(R.id.news);
 
         //refresh
@@ -112,6 +109,7 @@ public class News extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             final int finalI = i;
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, NEWS_API, null, new Response.Listener<JSONObject>() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onResponse(JSONObject response) {
                     try {

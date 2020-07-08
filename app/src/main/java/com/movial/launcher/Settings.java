@@ -16,18 +16,17 @@ import android.widget.RadioButton;
 
 public class Settings extends AppCompatActivity {
     //Definitions
-    Context context;
-    RadioButton column3, column4, column5;
-    RadioButton small, medium, large;
-    Button apply;
-    Button backToDefault;
-
     public static int numberOfColumns;
     public static int appsPerPage;
     public static int mLeft;
     public static int mRight;
     public static int imgWidth;
     public static int imgHeight;
+    Context context;
+    RadioButton column3, column4, column5;
+    RadioButton small, medium, large;
+    Button apply;
+    Button backToDefault;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override

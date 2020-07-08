@@ -3,6 +3,7 @@ List of apps
 * */
 package com.movial.launcher;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -19,14 +20,16 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+@SuppressLint("Registered")
 public class AppListBuilder extends AppCompatActivity {
     //definitions
+    public static String name;
+    private ApplicationInfo app;
+    private Context context;
     LinearLayout apkButton;
     ImageView apkImage;
     TextView apkName;
-    ApplicationInfo app;
-    Context context;
-    static String name;
+
     DesignComponents design;
 
     AppListBuilder(ApplicationInfo app, Context context) {

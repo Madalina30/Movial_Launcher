@@ -3,6 +3,7 @@ Creates the components
 * */
 package com.movial.launcher;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -16,8 +17,9 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+@SuppressLint("Registered")
 public class DesignComponents extends AppCompatActivity {
-
+    //definitions
     GridLayout grid;
     LinearLayout apkButton;
     ImageView apkImage;

@@ -3,6 +3,7 @@ For left and right swipe
 * */
 package com.movial.launcher;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.MotionEvent;
@@ -14,14 +15,14 @@ import android.widget.ScrollView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
-public class SwipeHandler {
+class SwipeHandler {
     //definitions
-    Activity activity;
-    ScrollView scroll;
-    public int pageNumber = 0;
-    public float x1, x2;
-    LinearLayout workOn;
-    GridLayout[] apps;
+    private Activity activity;
+    private ScrollView scroll;
+    private int pageNumber = 0;
+    private float x1, x2;
+    private LinearLayout workOn;
+    private GridLayout[] apps;
 
     SwipeHandler(Activity activity, LinearLayout workOn, GridLayout[] apps) {
         this.activity = activity;
@@ -34,7 +35,8 @@ public class SwipeHandler {
         this.scroll = scroll;
     }
 
-    public void Swipe() {
+    @SuppressLint("ClickableViewAccessibility")
+    void Swipe() {
         //to be able to swipe over the apps on the first page
 //        GridLayout grid = ((GridLayout) workOn.getChildAt(pageNumber + 1));
 //        for (int i = 0; i < grid.getChildCount(); i++) {
@@ -134,7 +136,8 @@ public class SwipeHandler {
         }
     }
 
-    public void swipeRight() {
+    @SuppressLint("ClickableViewAccessibility")
+    void swipeRight() {
         //from the news section to the apps
         scroll.setOnTouchListener(new View.OnTouchListener() {
             @Override

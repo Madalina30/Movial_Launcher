@@ -24,19 +24,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //definitions
-    static List<ApplicationInfo> listOfApps;
+    public static IntentFilter filter;
+    public MyReceiver receiver;
+    public static List<ApplicationInfo> listOfApps;
+    public int numberOfColumns;
+    public int appsPerPage;
+    public GridLayout[] apps;
+    private int mLeft, mRight, imgWidth, imgHeight;
     PackageManager pm;
-    static IntentFilter filter;
-    static MyReceiver receiver;
     Context context = this;
     RelativeLayout settings;
     Pagination pagination;
-    int page;
-    int mLeft, mRight, imgWidth, imgHeight;
-    public GridLayout[] apps;
     LinearLayout linearLayout;
-    public int numberOfColumns;
-    public int appsPerPage;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SourceLockedOrientationActivity")
@@ -82,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
 
         linearLayout = findViewById(R.id.designBase);
-
+//        linearLayout.invalidate();
+//        linearLayout.requestLayout();
         //app list processing
 
         SwipeHandler swipe = new SwipeHandler(this, linearLayout, apps);
@@ -100,14 +100,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onStart() {
+        super.onStart();
         registerReceiver(receiver, filter);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         unregisterReceiver(receiver);
     }
 
@@ -118,5 +118,8 @@ public class MainActivity extends AppCompatActivity {
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
+    }
+    public void updateAppList(){
+
     }
 }
