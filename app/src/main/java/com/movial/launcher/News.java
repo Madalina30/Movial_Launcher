@@ -71,6 +71,7 @@ public class News extends AppCompatActivity {
         context = this;
         activity = this;
 
+        //choosing a random category for the news
         int number = (int) Math.floor(Math.random() * 6);
         category = categories[number];
 
@@ -98,7 +99,7 @@ public class News extends AppCompatActivity {
             }
         });
 
-        //Instantiate scroll
+        //Instantiate scroll + swipe to the apps menu
         scroll = findViewById(R.id.scroll);
         SwipeHandler swipe = new SwipeHandler(activity, scroll);
         swipe.swipeRight();
@@ -124,8 +125,6 @@ public class News extends AppCompatActivity {
                         //getting information from the internet
                         JSONArray data = response.getJSONArray("articles");
                         JSONObject obj = (JSONObject) data.get(finalI);
-
-                        int size = (int) Math.floor((Math.random() * 350) + 300);
 
                         //setting image
                         img.setBackgroundResource(R.drawable.ic_bunny);

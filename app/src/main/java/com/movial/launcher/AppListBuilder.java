@@ -26,6 +26,8 @@ public class AppListBuilder extends AppCompatActivity {
     TextView apkName;
     ApplicationInfo app;
     Context context;
+    static String name;
+    DesignComponents design;
 
     AppListBuilder(ApplicationInfo app, Context context) {
         this.app = app;
@@ -34,11 +36,12 @@ public class AppListBuilder extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LinearLayout buildApp(int mLeft, int mRight, int imgWidth, int imgHeight) {
-        DesignComponents design = new DesignComponents();
+        design = new DesignComponents();
+
         //button
         apkButton = design.createLinearLayout(context, -2, -2, mLeft, 35, mRight, 35);
 
-        //apkImage
+        //apkImage - the icon of the app
         apkImage = design.createImageView(context, -2, -2, imgWidth, imgHeight);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
@@ -47,11 +50,11 @@ public class AppListBuilder extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //apkName
+        //apkName - the name of the app
         apkName = design.createTextView(context, -2, -2, 12);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
-            String name = context.getPackageManager().getApplicationLabel(appInfo).toString();
+            name = context.getPackageManager().getApplicationLabel(appInfo).toString();
             if (name.length() > 7)
                 name = name.substring(0, 7) + "...";
             apkName.setText(name);

@@ -5,15 +5,11 @@ package com.movial.launcher;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-
-import androidx.annotation.RequiresApi;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -121,7 +117,7 @@ public class SwipeHandler {
                             .playOn(workOn);
                 }
             }
-        } else if (x1 < x2){
+        } else if (x1 < x2) {
             pageNumber--;
             if (pageNumber == -1) {
                 //it goes to the NewsAndWeather class when swipe left

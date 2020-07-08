@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/ic_bunny"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Settings"
+        <activity
+            android:name=".Settings"
             android:theme="@style/Theme.News">
 
         </activity>
@@ -24,19 +25,23 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-<!--                <category android:name="android.intent.category.HOME" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!--                <category android:name="android.intent.category.HOME" />-->
+                <!--                <category android:name="android.intent.category.DEFAULT" />-->
             </intent-filter>
         </activity>
         <activity
             android:name=".News"
             android:theme="@style/Theme.News" />
-        <receiver android:name="MyReceiver" android:exported="true">
+
+        <receiver
+            android:name="MyReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 

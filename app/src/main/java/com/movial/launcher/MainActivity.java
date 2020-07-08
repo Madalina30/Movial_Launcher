@@ -4,7 +4,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //the screen will not be able to be in the landscape mode
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //for the navigation bar and notification bar to be transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -61,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
         filter.addAction(Intent.ACTION_PACKAGE_RESTARTED);
         filter.addDataScheme("package");
-        receiver = new MyReceiver();
-        registerReceiver(receiver, filter); //+unregister
+        receiver = new MyReceiver(this);
+
         settings = findViewById(R.id.settings);
         pm = getPackageManager();
         listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         //setting default values
         if (appsPerPage == 0) appsPerPage = 24;
-        if(numberOfColumns == 0) numberOfColumns = 4;
+        if (numberOfColumns == 0) numberOfColumns = 4;
         if (mLeft == 0 && mRight == 0) mLeft = mRight = 35;
         if (imgWidth == 0 && imgHeight == 0) imgWidth = imgHeight = 170;
 
@@ -103,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(context, "AICI SE OPRESTE", Toast.LENGTH_SHORT).show();
-        finish();
-        startActivity(getIntent());
+        registerReceiver(receiver, filter);
     }
 
     @Override
@@ -113,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(receiver);
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
