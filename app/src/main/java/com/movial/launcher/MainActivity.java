@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -27,15 +26,20 @@ public class MainActivity extends AppCompatActivity {
     public static IntentFilter filter;
     public MyReceiver receiver;
     public static List<ApplicationInfo> listOfApps;
-    public int numberOfColumns;
-    public int appsPerPage;
-    public GridLayout[] apps;
-    private int mLeft, mRight, imgWidth, imgHeight;
+    public static int numberOfColumns;
+    public static int appsPerPage;
+    public static GridLayout[] apps;
+    @SuppressLint("StaticFieldLeak")
+    public static Pagination pagination;
+    @SuppressLint("StaticFieldLeak")
+    public static LinearLayout linearLayout;
+    public static int mLeft, mRight, imgWidth, imgHeight;
+    @SuppressLint("StaticFieldLeak")
+    public static RelativeLayout settings;
+    @SuppressLint("StaticFieldLeak")
+    public static SwipeHandler swipe;
     PackageManager pm;
-    Context context = this;
-    RelativeLayout settings;
-    Pagination pagination;
-    LinearLayout linearLayout;
+    private Context context = this;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SourceLockedOrientationActivity")
@@ -79,13 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         pagination = new Pagination(appsPerPage, this);
         apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
-
         linearLayout = findViewById(R.id.designBase);
-//        linearLayout.invalidate();
-//        linearLayout.requestLayout();
-        //app list processing
-
-        SwipeHandler swipe = new SwipeHandler(this, linearLayout, apps);
+        swipe = new SwipeHandler(this, linearLayout, apps);
         linearLayout.addView(apps[0]);
         swipe.Swipe();
 
@@ -106,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(receiver);
     }
 
@@ -118,8 +117,5 @@ public class MainActivity extends AppCompatActivity {
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
-    }
-    public void updateAppList(){
-
     }
 }

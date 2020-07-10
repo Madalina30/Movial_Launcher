@@ -15,14 +15,15 @@ import java.util.List;
 
 class Pagination {
     //definitions
+    public static int pageNumber;
     private GridLayout[] pages = new GridLayout[50];
     private int appsPerPage;
-    private int pageNumber = 0;
     private Context context;
 
     Pagination(int appsPerPage, Context context) {
         this.appsPerPage = appsPerPage;
         this.context = context;
+        pageNumber = 0;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
