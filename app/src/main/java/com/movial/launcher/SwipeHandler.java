@@ -114,7 +114,7 @@ class SwipeHandler {
                 } else {
                     workOn.addView(apps[pageNumber]);
                     workOn.removeView(apps[pageNumber - 1]);
-                    YoYo.with(Techniques.SlideInRight)
+                    YoYo.with(Techniques.FadeInRight)
                             .duration(200)
                             .playOn(workOn);
                 }
@@ -129,7 +129,7 @@ class SwipeHandler {
             } else {
                 workOn.addView(apps[pageNumber]);
                 workOn.removeView(apps[pageNumber + 1]);
-                YoYo.with(Techniques.SlideInLeft)
+                YoYo.with(Techniques.FadeInLeft)
                         .duration(200)
                         .playOn(workOn);
             }

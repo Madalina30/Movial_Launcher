@@ -36,6 +36,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class News extends AppCompatActivity {
     //definitions
@@ -170,4 +176,18 @@ public class News extends AppCompatActivity {
         }
     }
 
+    public static String DateToTimeFormat(String oldstringDate) {
+        PrettyTime p = new PrettyTime(new Locale("us"));
+        String isTime = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
+                    Locale.ENGLISH);
+            Date date = sdf.parse(oldstringDate);
+            isTime = p.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return isTime;
+    }
 }
