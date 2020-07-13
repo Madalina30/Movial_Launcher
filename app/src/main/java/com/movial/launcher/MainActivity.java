@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void forSwipe() {
         LinearLayout linearLayout = findViewById(R.id.designBase);
-        SwipeHandler swipe = new SwipeHandler(this, linearLayout, apps);
+        SwipeHandler swipeLeftRight = new SwipeHandler(this, linearLayout, apps);
         linearLayout.addView(apps[0]);
-        swipe.Swipe();
+        swipeLeftRight.Swipe();
     }
 
     @Override
