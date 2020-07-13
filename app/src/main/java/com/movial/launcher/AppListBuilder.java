@@ -23,14 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 @SuppressLint("Registered")
 public class AppListBuilder extends AppCompatActivity {
     //definitions
-    public static String name;
     private ApplicationInfo app;
     private Context context;
-    LinearLayout apkButton;
-    ImageView apkImage;
-    TextView apkName;
-
-    DesignComponents design;
+    protected LinearLayout apkButton;
+    protected ImageView apkImage;
+    protected TextView apkName;
+    protected DesignComponents design;
 
     AppListBuilder(ApplicationInfo app, Context context) {
         this.app = app;
@@ -57,7 +55,8 @@ public class AppListBuilder extends AppCompatActivity {
         apkName = design.createTextView(context, -2, -2, 12);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
-            name = context.getPackageManager().getApplicationLabel(appInfo).toString();
+            //definitions
+            String name = context.getPackageManager().getApplicationLabel(appInfo).toString();
             if (name.length() > 7)
                 name = name.substring(0, 7) + "...";
             apkName.setText(name);

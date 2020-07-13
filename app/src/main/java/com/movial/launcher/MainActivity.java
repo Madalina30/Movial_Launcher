@@ -23,22 +23,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //definitions
-    public static IntentFilter filter;
-    public MyReceiver receiver;
-    public static List<ApplicationInfo> listOfApps;
-    public static int numberOfColumns;
-    public static int appsPerPage;
-    public static GridLayout[] apps;
-    @SuppressLint("StaticFieldLeak")
-    public static Pagination pagination;
-    @SuppressLint("StaticFieldLeak")
-    public static LinearLayout linearLayout;
-    public static int mLeft, mRight, imgWidth, imgHeight;
-    @SuppressLint("StaticFieldLeak")
-    public static RelativeLayout settings;
-    @SuppressLint("StaticFieldLeak")
-    public static SwipeHandler swipe;
-    PackageManager pm;
+    private IntentFilter filter;
+    private MyReceiver receiver;
+    private int numberOfColumns;
+    private int appsPerPage;
+    private GridLayout[] apps;
+    private int mLeft, mRight, imgWidth, imgHeight;
     private Context context = this;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -54,7 +44,37 @@ public class MainActivity extends AppCompatActivity {
         //for the navigation bar and notification bar to be transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        //general setup
+        //setup for receiver
+        setUpReceiver();
+
+        //Take the values from sharedPreferences
+        takeFromSharedPreferences();
+
+        //getting the apps + pagination
+        designingTheListOfApps();
+
+        //for the swipe between apps and news gestures
+        forSwipe();
+
+        //button for settings
+        RelativeLayout settings = findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Settings.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void takeFromSharedPreferences() {
+        numberOfColumns = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("numberOfColumns", 4);
+        appsPerPage = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("appsPerPage", 24);
+        mLeft = mRight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("mLeft", 35);
+        imgWidth = imgHeight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("imgWidth", 170);
+    }
+
+    private void setUpReceiver() {
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
@@ -64,38 +84,20 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(Intent.ACTION_PACKAGE_RESTARTED);
         filter.addDataScheme("package");
         receiver = new MyReceiver(this);
+    }
 
-        settings = findViewById(R.id.settings);
-        pm = getPackageManager();
-        listOfApps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        //setting default values
-        if (appsPerPage == 0) appsPerPage = 24;
-        if (numberOfColumns == 0) numberOfColumns = 4;
-        if (mLeft == 0 && mRight == 0) mLeft = mRight = 35;
-        if (imgWidth == 0 && imgHeight == 0) imgWidth = imgHeight = 170;
-
-        //Take the values from sharedPreferences
-        numberOfColumns = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("numberOfColumns", 4);
-        appsPerPage = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("appsPerPage", 24);
-        mLeft = mRight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("mLeft", 35);
-        imgWidth = imgHeight = getSharedPreferences("gridValues", MODE_PRIVATE).getInt("imgWidth", 170);
-
-        pagination = new Pagination(appsPerPage, this);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void designingTheListOfApps() {
+        List<ApplicationInfo> listOfApps = getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA);
+        Pagination pagination = new Pagination(appsPerPage, this);
         apps = pagination.buildList(listOfApps, numberOfColumns, mLeft, mRight, imgWidth, imgHeight);
-        linearLayout = findViewById(R.id.designBase);
-        swipe = new SwipeHandler(this, linearLayout, apps);
+    }
+
+    private void forSwipe() {
+        LinearLayout linearLayout = findViewById(R.id.designBase);
+        SwipeHandler swipe = new SwipeHandler(this, linearLayout, apps);
         linearLayout.addView(apps[0]);
         swipe.Swipe();
-
-        //button for settings
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Settings.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

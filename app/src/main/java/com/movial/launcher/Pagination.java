@@ -15,7 +15,7 @@ import java.util.List;
 
 class Pagination {
     //definitions
-    public static int pageNumber;
+    private int pageNumber;
     private GridLayout[] pages = new GridLayout[50];
     private int appsPerPage;
     private Context context;

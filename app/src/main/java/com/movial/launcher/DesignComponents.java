@@ -27,8 +27,8 @@ public class DesignComponents extends AppCompatActivity {
 
     public GridLayout createGridLayout(Context context, int width, int height, int nrColumns) {
         grid = new GridLayout(context);
-        LinearLayout.LayoutParams apk = new LinearLayout.LayoutParams(width, height);
-        grid.setLayoutParams(apk);
+        LinearLayout.LayoutParams apkGridLayoutParams = new LinearLayout.LayoutParams(width, height);
+        grid.setLayoutParams(apkGridLayoutParams);
         grid.setBackground(Drawable.createFromPath("@android:color/transparent"));
         grid.setColumnCount(nrColumns);
         return grid;
@@ -38,10 +38,10 @@ public class DesignComponents extends AppCompatActivity {
         //-2 = wrap, -1 = match
         //default margins 25, 15, 25, 15
         apkButton = new LinearLayout(context);
-        LinearLayout.LayoutParams apk = new LinearLayout.LayoutParams(width, height);
-        apk.setMargins(mLeft, mTop, mRight, mBottom);
-        apk.gravity = Gravity.CENTER;
-        apkButton.setLayoutParams(apk);
+        LinearLayout.LayoutParams apkLinearLayoutParams = new LinearLayout.LayoutParams(width, height);
+        apkLinearLayoutParams.setMargins(mLeft, mTop, mRight, mBottom);
+        apkLinearLayoutParams.gravity = Gravity.CENTER;
+        apkButton.setLayoutParams(apkLinearLayoutParams);
         apkButton.setBackground(Drawable.createFromPath("@android:color/transparent"));
         apkButton.setOrientation(LinearLayout.VERTICAL);
         return apkButton;
