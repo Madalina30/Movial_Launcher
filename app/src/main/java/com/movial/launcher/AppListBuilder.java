@@ -14,21 +14,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 @SuppressLint("Registered")
-public class AppListBuilder extends AppCompatActivity {
+class AppListBuilder{
     //definitions
     private ApplicationInfo app;
     private Context context;
-    protected LinearLayout apkButton;
-    protected ImageView apkImage;
-    protected TextView apkName;
-    protected DesignComponents design;
 
     AppListBuilder(ApplicationInfo app, Context context) {
         this.app = app;
@@ -36,14 +30,14 @@ public class AppListBuilder extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LinearLayout buildApp(int mLeft, int mRight, int imgWidth, int imgHeight) {
-        design = new DesignComponents();
+    LinearLayout buildApp(int mLeft, int mRight, int imgWidth, int imgHeight) {
+        DesignComponents design = new DesignComponents();
 
         //button
-        apkButton = design.createLinearLayout(context, -2, -2, mLeft, 35, mRight, 35);
+        LinearLayout apkButton = design.createLinearLayout(context, -2, -2, mLeft, 35, mRight, 35);
 
         //apkImage - the icon of the app
-        apkImage = design.createImageView(context, -2, -2, imgWidth, imgHeight);
+        ImageView apkImage = design.createImageView(context, -2, -2, imgWidth, imgHeight);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             apkImage.setBackground(context.getPackageManager().getApplicationIcon(appInfo));
@@ -52,7 +46,7 @@ public class AppListBuilder extends AppCompatActivity {
         }
 
         //apkName - the name of the app
-        apkName = design.createTextView(context, -2, -2, 12);
+        TextView apkName = design.createTextView(context, -2, -2, 12);
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(app.packageName, 0);
             //definitions
@@ -78,14 +72,13 @@ public class AppListBuilder extends AppCompatActivity {
         return apkButton;
     }
 
-    public void openApp() {
+    private void openApp() {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(app.packageName);
         if (intent != null) {
             try {
                 context.startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "App not found", Toast.LENGTH_SHORT).show();
             }
         }
     }

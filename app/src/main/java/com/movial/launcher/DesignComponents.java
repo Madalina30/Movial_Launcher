@@ -15,18 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressLint("Registered")
-public class DesignComponents extends AppCompatActivity {
-    //definitions
-    GridLayout grid;
-    LinearLayout apkButton;
-    ImageView apkImage;
-    TextView apkName;
+class DesignComponents {
 
-    public GridLayout createGridLayout(Context context, int width, int height, int nrColumns) {
-        grid = new GridLayout(context);
+    GridLayout createGridLayout(Context context, int width, int height, int nrColumns) {
+        //definitions
+        GridLayout grid = new GridLayout(context);
         LinearLayout.LayoutParams apkGridLayoutParams = new LinearLayout.LayoutParams(width, height);
         grid.setLayoutParams(apkGridLayoutParams);
         grid.setBackground(Drawable.createFromPath("@android:color/transparent"));
@@ -34,10 +29,10 @@ public class DesignComponents extends AppCompatActivity {
         return grid;
     }
 
-    public LinearLayout createLinearLayout(Context context, int width, int height, int mLeft, int mTop, int mRight, int mBottom) {
+    LinearLayout createLinearLayout(Context context, int width, int height, int mLeft, int mTop, int mRight, int mBottom) {
         //-2 = wrap, -1 = match
         //default margins 25, 15, 25, 15
-        apkButton = new LinearLayout(context);
+        LinearLayout apkButton = new LinearLayout(context);
         LinearLayout.LayoutParams apkLinearLayoutParams = new LinearLayout.LayoutParams(width, height);
         apkLinearLayoutParams.setMargins(mLeft, mTop, mRight, mBottom);
         apkLinearLayoutParams.gravity = Gravity.CENTER;
@@ -47,8 +42,8 @@ public class DesignComponents extends AppCompatActivity {
         return apkButton;
     }
 
-    public ImageView createImageView(Context context, int width, int height, int imgWidth, int imgHeight) {
-        apkImage = new ImageView(context);
+    ImageView createImageView(Context context, int width, int height, int imgWidth, int imgHeight) {
+        ImageView apkImage = new ImageView(context);
         LinearLayout.LayoutParams img = new LinearLayout.LayoutParams(width, height);
         img.width = imgWidth;
         img.height = imgHeight;
@@ -59,8 +54,8 @@ public class DesignComponents extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public TextView createTextView(Context context, int width, int height, int textSize) {
-        apkName = new TextView(context);
+    TextView createTextView(Context context, int width, int height, int textSize) {
+        TextView apkName = new TextView(context);
         LinearLayout.LayoutParams text = new LinearLayout.LayoutParams(width, height);
         text.gravity = Gravity.CENTER;
         apkName.setLayoutParams(text);
