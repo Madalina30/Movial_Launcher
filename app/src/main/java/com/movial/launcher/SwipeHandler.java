@@ -8,26 +8,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
+import android.widget.GridView;
 import android.widget.ScrollView;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 
 class SwipeHandler {
     //definitions
     private Activity activity;
     private ScrollView scroll;
-    private int pageNumber = 0;
+    private GridView gridView;
     private float x1, x2;
-    private LinearLayout workOn;
-    private GridLayout[] apps;
 
-    SwipeHandler(Activity activity, LinearLayout workOn, GridLayout[] apps) {
+    SwipeHandler(Activity activity, GridView gridView) {
         this.activity = activity;
-        this.workOn = workOn;
-        this.apps = apps;
+        this.gridView = gridView;
     }
 
     SwipeHandler(Activity activity, ScrollView scroll) {
@@ -37,7 +30,7 @@ class SwipeHandler {
 
     @SuppressLint("ClickableViewAccessibility")
     void Swipe() {
-        workOn.setOnTouchListener(new View.OnTouchListener() {
+        gridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent touchEvent) {
                 switch (touchEvent.getAction()) {
@@ -46,43 +39,15 @@ class SwipeHandler {
                         break;
                     case MotionEvent.ACTION_UP:
                         x2 = touchEvent.getX();
-                        checkDirection(x1, x2);
+                        if (x1 < x2){
+                            Intent intent = new Intent(activity, News.class);
+                            activity.startActivity(intent);
+                        }
                         break;
                 }
-                return true;
+                return false;
             }
         });
-    }
-
-    private void checkDirection(float x1, float x2) {
-        if (x1 > x2) {
-            if (pageNumber != -1) {
-                pageNumber++;
-                if (apps[pageNumber] == null) {
-                    pageNumber = pageNumber - 1;
-                } else {
-                    workOn.addView(apps[pageNumber]);
-                    workOn.removeView(apps[pageNumber - 1]);
-                    YoYo.with(Techniques.FadeInRight)
-                            .duration(200)
-                            .playOn(workOn);
-                }
-            }
-        } else if (x1 < x2) {
-            pageNumber--;
-            if (pageNumber == -1) {
-                //it goes to the NewsAndWeather class when swipe left
-                Intent intent = new Intent(activity, News.class);
-                activity.startActivity(intent);
-                pageNumber = 0;
-            } else {
-                workOn.addView(apps[pageNumber]);
-                workOn.removeView(apps[pageNumber + 1]);
-                YoYo.with(Techniques.FadeInLeft)
-                        .duration(200)
-                        .playOn(workOn);
-            }
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Gravity;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,16 +17,6 @@ import androidx.annotation.RequiresApi;
 
 @SuppressLint("Registered")
 class DesignComponents {
-
-    GridLayout createGridLayout(Context context, int width, int height, int nrColumns) {
-        //definitions
-        GridLayout grid = new GridLayout(context);
-        LinearLayout.LayoutParams apkGridLayoutParams = new LinearLayout.LayoutParams(width, height);
-        grid.setLayoutParams(apkGridLayoutParams);
-        grid.setBackground(Drawable.createFromPath("@android:color/transparent"));
-        grid.setColumnCount(nrColumns);
-        return grid;
-    }
 
     LinearLayout createLinearLayout(Context context, int width, int height, int mLeft, int mTop, int mRight, int mBottom) {
         //-2 = wrap, -1 = match
