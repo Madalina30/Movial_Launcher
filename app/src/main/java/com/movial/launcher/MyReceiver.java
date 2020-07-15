@@ -28,12 +28,12 @@ public class MyReceiver extends BroadcastReceiver {
         if (Objects.equals(intent.getAction(), Intent.ACTION_PACKAGE_REMOVED)) {
             //when an app is uninstalled
             Toast.makeText(context, "APP UNINSTALLED", Toast.LENGTH_SHORT).show();
-            Log.d("MyReceiver", "UninstallReceiver:packageName: " + packageName);
+            Log.e("MyReceiver", "UninstallReceiver:packageName: " + packageName);
 
         } else if (Objects.equals(intent.getAction(), Intent.ACTION_PACKAGE_ADDED)) {
             //when an app is installed
             Toast.makeText(context, "APP INSTALLED", Toast.LENGTH_SHORT).show();
-            Log.d("MyReceiver", "InstallReceiver:packageName: " + packageName);
+            Log.e("MyReceiver", "InstallReceiver:packageName: " + packageName);
 
         }
     }

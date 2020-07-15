@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void forSwipe() {
         //aici pt swipe left (catre news) si right (catre altcv) separat
-        SwipeHandler swipeHandler = new SwipeHandler(this, gridView);
+        SwipeHandler swipeHandler = new SwipeHandler(this, linearLayout, gridView);
         swipeHandler.Swipe();
     }
 
