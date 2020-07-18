@@ -13,13 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 class SwipeHandler {
     //definitions
     private Activity activity;
-    private ScrollView scroll;
     private GridView gridView;
     private LinearLayout linearLayout;
+    private RecyclerView recyclerView;
     private float x1, x2;
+    private SwipeRefreshLayout refresh;
 
     SwipeHandler(Activity activity, LinearLayout linearLayout, GridView gridView) {
         this.activity = activity;
@@ -27,9 +31,10 @@ class SwipeHandler {
         this.gridView = gridView;
     }
 
-    SwipeHandler(Activity activity, ScrollView scroll) {
+    SwipeHandler(Activity activity, SwipeRefreshLayout refresh, RecyclerView recyclerView) {
         this.activity = activity;
-        this.scroll = scroll;
+        this.refresh = refresh;
+        this.recyclerView = recyclerView;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -88,7 +93,29 @@ class SwipeHandler {
     @SuppressLint("ClickableViewAccessibility")
     void swipeRight() {
         //from the news section to the apps
-        scroll.setOnTouchListener(new View.OnTouchListener() {
+        refresh.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = event.getX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        x2 = event.getX();
+                        float valueX = x1 - x2;
+                        if(Math.abs(valueX) > 150) {
+                            if (x1>x2) {
+                                Intent intent = new Intent(activity, MainActivity.class);
+                                activity.startActivity(intent);
+                                activity.finish();
+                            }
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {

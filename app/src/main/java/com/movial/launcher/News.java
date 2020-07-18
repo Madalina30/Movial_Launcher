@@ -5,6 +5,8 @@ package com.movial.launcher;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
@@ -14,11 +16,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +37,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Adapter.MyAdapter;
+import Model.ListItem;
+
 public class News extends AppCompatActivity {
     //definitions
     SwipeRefreshLayout swipeRefreshLayout;
-    ScrollView scroll;
-    TextView title;
-    ImageView img;
-    LinearLayout newsSection, newNews;
+    private RecyclerView newsSection;
+    private RecyclerView.Adapter adapter;
+    private List<ListItem> listItems;
     SearchView searchGoogle;
+    private TextView loading;
+    LinearLayout linearLayout;
+
     RequestQueue requestQueue;
     JsonObjectRequest jsonObjectRequest;
     JSONArray data;
@@ -63,13 +73,14 @@ public class News extends AppCompatActivity {
         //for the navigation bar and notification bar to be transparent
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        //choosing a random category for the news
-        chooseRandomCategory();
-
-        newsSection = findViewById(R.id.news);
-
-        //Instantiate the search bar
+        // Instantiations
+        requestQueue = Volley.newRequestQueue(this);
+        loading = findViewById(R.id.loading);
+        swipeRefreshLayout = findViewById(R.id.refresh);
         searchGoogle = findViewById(R.id.google);
+        newsSection = findViewById(R.id.recyclerView);
+        linearLayout = findViewById(R.id.linearLayout);
+
         searchGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,28 +90,40 @@ public class News extends AppCompatActivity {
             }
         });
 
-        //Instantiate scroll + swipe to the apps menu
-        scroll = findViewById(R.id.scroll);
-        SwipeHandler swipe = new SwipeHandler(News.this, scroll);
-        swipe.swipeRight();
+        newsSection.setHasFixedSize(true);
+        newsSection.setLayoutManager(new LinearLayoutManager(this));
 
-        // Instantiate the RequestQueue
-        requestQueue = Volley.newRequestQueue(this);
+        listItems = new ArrayList<>();
 
-        // Request a string response from the provided URL
+        //choosing a random category for the news
+        chooseRandomCategory();
+
+        try {
+            Thread.sleep(200);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         infosFromUrl();
-
+        adapter = new MyAdapter(News.this, listItems, obj);
+        newsSection.setAdapter(adapter);
         //refresh
-        swipeRefreshLayout = findViewById(R.id.refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                loading.setVisibility(View.GONE);
                 newsSection.removeAllViewsInLayout();
                 chooseRandomCategory();
                 infosFromUrl();
                 swipeRefreshLayout.setRefreshing(false);
+                adapter = new MyAdapter(News.this, listItems, obj);
+                newsSection.setAdapter(adapter);
             }
         });
+
+        SwipeHandler swipeToApps = new SwipeHandler(this, swipeRefreshLayout, newsSection);
+        swipeToApps.swipeRight();
     }
 
     private void chooseRandomCategory() {
@@ -109,88 +132,48 @@ public class News extends AppCompatActivity {
         NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void designingElements() {
-        DesignComponents designComponents = new DesignComponents();
-        title = designComponents.createTextView(News.this, -2, -2, 12);
-        img = designComponents.createImageView(News.this, -2, -2, 300, 300);
-        newNews = designComponents.createLinearLayout(News.this, -1, -2, 40, 40, 40, 40);
-        newNews.setOrientation(LinearLayout.HORIZONTAL);
-        newNews.setBackgroundColor(Color.parseColor("#3a3a3a"));
-    }
-
-    private void settingImage() throws JSONException {
-        img.setBackgroundResource(R.drawable.ic_bunny);
-        img.getLayoutParams().width = 400;
-        img.getLayoutParams().height = 250;
-        Picasso.get().load(obj.getString("urlToImage")).resize(400, 250).into(img);
-        newNews.addView(img);
-    }
-
-    private void settingTitle() throws JSONException {
-        title.setText(obj.getString("title"));
-        title.setPadding(20, 0, 0, 0);
-        newNews.addView(title);
-    }
-
-    private void goToNewsSite() {
-        final JSONObject objF = obj;
-        newNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    String url = objF.getString("url");
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    private void goToNewsSite() {
+//        final JSONObject objF = obj;
+//        newNews.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    String url = objF.getString("url");
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setData(Uri.parse(url));
+//                    startActivity(intent);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 
     private void infosFromUrl() {
-        for (int i = 0; i < 20; i++) {
-            final int finalI = i;
-            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, NEWS_API, null, new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        //construction of elements
-                        designingElements();
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                NEWS_API,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                        //getting information from the internet
-                        data = response.getJSONArray("articles");
-                        obj = (JSONObject) data.get(finalI);
-
-                        //setting image
-                        settingImage();
-
-                        //setting news title
-                        settingTitle();
-
-                        newsSection.addView(newNews);
-
-                        //going to the news site
-                        goToNewsSite();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        title.setText("" + e);
-
+                        try {
+                            data = response.getJSONArray("articles");
+                            for (int i = 0; i < 20; i++) {
+                                obj = (JSONObject) data.get(i);
+                                ListItem item = new ListItem(obj.getString("title"), obj.getString("description"), obj.getString("urlToImage"));
+                                listItems.add(item);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(News.this, error.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
-            requestQueue.add(jsonObjectRequest);
-
-        }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(News.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 }
