@@ -21,7 +21,6 @@ class SwipeHandler {
     private Activity activity;
     private GridView gridView;
     private LinearLayout linearLayout;
-    private RecyclerView recyclerView;
     private float x1, x2;
     private SwipeRefreshLayout refresh;
 
@@ -31,10 +30,9 @@ class SwipeHandler {
         this.gridView = gridView;
     }
 
-    SwipeHandler(Activity activity, SwipeRefreshLayout refresh, RecyclerView recyclerView) {
+    SwipeHandler(Activity activity, SwipeRefreshLayout refresh) {
         this.activity = activity;
         this.refresh = refresh;
-        this.recyclerView = recyclerView;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -115,27 +113,6 @@ class SwipeHandler {
                 return false;
             }
         });
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        x1 = event.getX();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        x2 = event.getX();
-                        float valueX = x1 - x2;
-                        if(Math.abs(valueX) > 150) {
-                            if (x1>x2) {
-                                Intent intent = new Intent(activity, MainActivity.class);
-                                activity.startActivity(intent);
-                                activity.finish();
-                            }
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
+
     }
 }

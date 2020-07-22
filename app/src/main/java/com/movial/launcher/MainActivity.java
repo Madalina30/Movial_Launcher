@@ -72,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         //for the swipe between apps and news gestures
         forSwipe();
-
-        //button for settings
-        RelativeLayout settings = findViewById(R.id.settings);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Settings.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public void addGridListeners() {

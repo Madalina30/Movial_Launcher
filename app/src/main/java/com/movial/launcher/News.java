@@ -5,6 +5,7 @@ package com.movial.launcher;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -92,22 +93,17 @@ public class News extends AppCompatActivity {
 
         newsSection.setHasFixedSize(true);
         newsSection.setLayoutManager(new LinearLayoutManager(this));
+        newsSection.setItemAnimator(new DefaultItemAnimator());
 
         listItems = new ArrayList<>();
 
         //choosing a random category for the news
+
         chooseRandomCategory();
-
-        try {
-            Thread.sleep(200);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         infosFromUrl();
         adapter = new MyAdapter(News.this, listItems, obj);
         newsSection.setAdapter(adapter);
+
         //refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -119,10 +115,11 @@ public class News extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 adapter = new MyAdapter(News.this, listItems, obj);
                 newsSection.setAdapter(adapter);
+//                swipeRefreshLayout.setEnabled(false);
             }
         });
 
-        SwipeHandler swipeToApps = new SwipeHandler(this, swipeRefreshLayout, newsSection);
+        SwipeHandler swipeToApps = new SwipeHandler(this, swipeRefreshLayout);
         swipeToApps.swipeRight();
     }
 
@@ -131,23 +128,6 @@ public class News extends AppCompatActivity {
         String category = categories[number];
         NEWS_API = "https://newsapi.org/v2/top-headlines?country=us&category=" + category + "&apiKey=5a5cf98cf6344a0795cd5d6cc61bfa31";
     }
-
-//    private void goToNewsSite() {
-//        final JSONObject objF = obj;
-//        newNews.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    String url = objF.getString("url");
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setData(Uri.parse(url));
-//                    startActivity(intent);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
 
     private void infosFromUrl() {
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
