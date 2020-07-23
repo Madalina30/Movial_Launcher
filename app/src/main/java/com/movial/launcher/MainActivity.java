@@ -35,12 +35,11 @@ public class MainActivity extends AppCompatActivity {
     //definitions
     private IntentFilter filter;
     private MyReceiver receiver;
-    private Context context = this;
     PackageManager packageManager;
-    public static List<AppInfo> apps;
+    private static List<AppInfo> apps;
     private LinearLayout linearLayout;
-    GridView gridView;
-    public static ArrayAdapter<AppInfo> adapter;
+    static GridView gridView;
+    private static ArrayAdapter<AppInfo> adapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SourceLockedOrientationActivity")
@@ -57,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         linearLayout = findViewById(R.id.linearLayout);
+
+        //setup for receiver
+        setUpReceiver();
+
         //creating list of apps
         apps = null;
         adapter = null;
@@ -64,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
         loadListView();
         addGridListeners();
 
-        //setup for receiver
-        setUpReceiver();
+
 
         //Take the values from sharedPreferences
         takeFromSharedPreferences();
@@ -79,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = packageManager.getLaunchIntentForPackage(apps.get(i).name.toString());
-                MainActivity.this.startActivity(intent);
+                startActivity(intent);
             }
         });
     }
 
 
-    private void loadListView() {
+    void loadListView() {
 
         try {
             gridView = findViewById(R.id.gridView);
@@ -138,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadApps() {
+    void loadApps() {
         try {
 
             packageManager = getPackageManager();
@@ -179,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
         filter.addAction(Intent.ACTION_PACKAGE_RESTARTED);
         filter.addDataScheme("package");
-        receiver = new MyReceiver(this);
+        receiver = new MyReceiver(this, linearLayout, apps, adapter);
     }
 
     private void forSwipe() {
@@ -193,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         registerReceiver(receiver, filter);
     }
+
 
     @Override
     protected void onStop() {

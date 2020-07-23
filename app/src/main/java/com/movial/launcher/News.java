@@ -115,7 +115,6 @@ public class News extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
                 adapter = new MyAdapter(News.this, listItems, obj);
                 newsSection.setAdapter(adapter);
-//                swipeRefreshLayout.setEnabled(false);
             }
         });
 
